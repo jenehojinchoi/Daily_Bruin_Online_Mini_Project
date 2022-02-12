@@ -72,9 +72,9 @@ c. Pagination is useful when your database has lots of entries and it would take
 4. Make a search bar which queries the backend.
 
 ### Resources
-Django tutorial: https://docs.djangoproject.com/en/3.2/intro/tutorial01/
-DRF tutorial: https://www.django-rest-framework.org/tutorial/1-serialization/
-REST API: https://www.tutorialspoint.com/restful/restful_introduction.htm
-React tutorial: https://reactjs.org/tutorial/tutorial.html
-Ant design: https://ant.design/
-- Table: https://ant.design/components/table/
+Django tutorial: https://docs.djangoproject.com/en/3.2/intro/tutorial01/ </br>
+DRF tutorial: https://www.django-rest-framework.org/tutorial/1-serialization/</br>
+REST API: https://www.tutorialspoint.com/restful/restful_introduction.htm</br>
+React tutorial: https://reactjs.org/tutorial/tutorial.html</br>
+Ant design: https://ant.design/</br>
+- Table: https://ant.design/components/table/</br>
