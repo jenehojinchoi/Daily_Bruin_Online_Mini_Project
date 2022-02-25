@@ -25,6 +25,22 @@ def getOrganization(request, id):
     serializer = OrganizationSerializer(organization, many=False)
     return JsonResponse(serializer.data)
 
+
+@api_view(['PUT'])
+def updateOrganization(request, id):
+    organization = get_object_or_404(
+        Organization,
+        id=id,
+    )
+    serializer = OrganizationSerializer(organization, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        message = { 'detail' : 'Organization updated', 'id' : organization.id }
+        return Response(message, status=status.HTTP_200_OK)
+    else:
+        return JsonResponse(serializer.errors)
+
+
 @api_view(['POST'])
 def createOrganization(request):
     data = request.data
@@ -42,6 +58,16 @@ def createOrganization(request):
         
     except: 
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def deleteOrganization(request, id):
+    organization = get_object_or_404(
+        Organization,
+        id=id
+    )
+    organization.delete()
+    message = {'detail' : 'Organization deleted', 'id' : organization.id}
+    return Response(message, status=HTTP_204_NO_CONTENT)
 
 
 # sources
@@ -69,7 +95,8 @@ def updateSource(request, id):
     serializer = SourceSerializer(source, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return JsonResponse({'id': source.id})
+        message = { 'detail' : 'Source updated', 'id' : source.id }
+        return Response(message, status=status.HTTP_200_OK)
     else:
         return JsonResponse(serializer.errors)
 
@@ -103,11 +130,11 @@ def createSource(request):
 
 @api_view(['DELETE'])
 def deleteSource(request, id):
-	source = get_object_or_404(
+    source = get_object_or_404(
 		Source,
 		id=id
 	)
-	source.delete()
-	return JsonResponse({
-		'id': id
-	})
+    source.delete()
+    message = { 'detail' : 'Source deleted', 'id' : source.id }
+    
+    return Response(message, status=HTTP_204_NO_CONTENT)
