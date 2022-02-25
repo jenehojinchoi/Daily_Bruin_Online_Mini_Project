@@ -1,5 +1,8 @@
 from django.urls import path
-from app.views import getSources, getSource, createSource, updateSource, deleteSource, getOrganizations, createOrganization
+from app.views import (
+    getSources, getSource, createSource, updateSource, deleteSource, 
+    getOrganizations, getOrganization, createOrganization
+)
 
 urlpatterns = [
     # sources
@@ -11,5 +14,6 @@ urlpatterns = [
 
     # organizations
     path('organization/', getOrganizations, name="organizations"),
+    path('organization/<int:id>/', getOrganization, name="organization"),
     path('organization/create/', createOrganization, name="create"), 
 ]

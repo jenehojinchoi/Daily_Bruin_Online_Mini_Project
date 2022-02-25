@@ -16,6 +16,14 @@ def getOrganizations(request):
     serializer = OrganizationSerializer(organizations, many=True)
     return JsonResponse(serializer.data, safe=False)
 
+@api_view(['GET'])
+def getOrganization(request, id):
+    organization = get_object_or_404(
+        Organization,
+        id=id,
+    )
+    serializer = OrganizationSerializer(organization, many=False)
+    return JsonResponse(serializer.data)
 
 @api_view(['POST'])
 def createOrganization(request):
