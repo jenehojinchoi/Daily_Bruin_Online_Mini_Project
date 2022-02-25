@@ -1,13 +1,42 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 import json
-from .serializers import SourceSerializer
+from .serializers import SourceSerializer, OrganizationSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404 
-from app.models import Source
+from app.models import Organization, Source
 
+
+# organization
+@api_view(['GET'])
+def getOrganizations(request):
+    organizations = Organization.objects.all()
+    serializer = OrganizationSerializer(organizations, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['POST'])
+def createOrganization(request):
+    data = request.data
+
+    try: 
+        if Organization.objects.filter(name = data['name']).exists():
+            message = {'detail': 'Organization with this name already exists'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+        organization = Organization.objects.create(
+            name = data['name'],
+            notes = data['notes'],
+        )
+        return Response("Successfully created")
+        
+    except: 
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+
+# sources
 @api_view(['GET'])
 def getSources(request):
     sources = Source.objects.all()
@@ -41,19 +70,26 @@ def createSource(request):
     data = request.data
 
     try: 
-        print(data)
-        source = Source.objects.create(
-            name = data['name'],
-            organization = data['organization'],
-            email = data['email'],
-            notes = data['notes'],
-            phone = data['phone'],
-        )
-        print(source)
-        return Response("Successfully created")
+        if Source.objects.filter(name = data['name']).exists():
+            message = {'detail': 'Source with this name already exists'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
+            
+        if Source.objects.filter(email = data['email']).exists():
+            message = {'detail': 'Source with this email already exists'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
+        else: 
+            source = Source.objects.create(
+                name = data['name'],
+                organization_id = data['organization'],
+                email = data['email'],
+                notes = data['notes'],
+                phone = data['phone'],
+            )
+            return Response("Successfully created")
         
     except: 
-        message = {'detail': 'This source already exists'}
+        message = {'detail': 'This source cannot be created'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -67,4 +103,3 @@ def deleteSource(request, id):
 	return JsonResponse({
 		'id': id
 	})
-
